@@ -1,3 +1,5 @@
+const { assert } = require("chai");
+
 const decentralizedSocialMedia = artifacts.require(
   "./decentralizedSocialMedia.sol"
 );
@@ -7,15 +9,15 @@ require("chai")
   .should();
 
 contract("decentralizedSocialMedia", ([deployer, author, tipper]) => {
-  let decentralizedSocialMedia;
+  let decentraMedia;
 
   before(async () => {
-    decentralizedSocialMedia = await decentralizedSocialMedia.deployed();
+    decentraMedia = await decentralizedSocialMedia.deployed();
   });
 
   describe("deployment", async () => {
     it("deploys successfully", async () => {
-      const address = await decentralizedSocialMedia.address;
+      const address = await decentraMedia.address;
       assert.notEqual(address, 0x0);
       assert.notEqual(address, "");
       assert.notEqual(address, null);
@@ -23,106 +25,88 @@ contract("decentralizedSocialMedia", ([deployer, author, tipper]) => {
     });
 
     it("has a name", async () => {
-      const name = await decentralizedSocialMedia.name();
+      const name = await decentraMedia.name();
       assert.equal(name, "decentralizedSocialMedia");
     });
   });
 
-  describe("images", async () => {
-    let result, imageCount;
-    const hash = "QmV8cfu6n4NT5xRr2AHdKxFMTZEJrA44qgrBCr739BN9Wb";
+  describe("posts", async () => {
+    let result;
+    const hash = "abc123";
+    let postCount;
 
     before(async () => {
-      result = await decentralizedSocialMedia.uploadImage(
-        hash,
-        "Image description",
-        { from: author }
-      );
-      imageCount = await decentralizedSocialMedia.imageCount();
+      result = await decentraMedia.createPost(hash, "This is the description", {
+        from: author,
+      });
+      postCount = await decentraMedia.postCount();
     });
 
-    //check event
-    it("creates images", async () => {
-      // SUCESS
-      assert.equal(imageCount, 1);
+    it("creates posts", async () => {
+      assert.equal(postCount, 1);
       const event = result.logs[0].args;
-      assert.equal(event.id.toNumber(), imageCount.toNumber(), "id is correct");
-      assert.equal(event.hash, hash, "Hash is correct");
+      assert.equal(event.id.toNumber(), postCount.toNumber(), "id is correct!");
+      assert.equal(event.hash, hash, "Hash is correct!");
       assert.equal(
         event.description,
-        "Image description",
-        "description is correct"
+        "This is the description",
+        "Description is correct!"
       );
-      assert.equal(event.tipAmount, "0", "tip amount is correct");
-      assert.equal(event.author, author, "author is correct");
+      assert.equal(event.tipAmount, "0", "Tip amount is correct!");
+      assert.equal(event.author, author, "Author is correct!");
 
-      // FAILURE: Image must have hash
-      await decentralizedSocialMedia.uploadImage("", "Image description", {
+      await decentraMedia.createPost("", "This is the description", {
         from: author,
       }).should.be.rejected;
-
-      // FAILURE: Image must have description
-      await decentralizedSocialMedia.uploadImage("Image hash", "", {
-        from: author,
-      }).should.be.rejected;
+      await decentraMedia.createPost(hash, "", { from: author }).should.be
+        .rejected;
     });
 
-    //check from Struct
-    it("lists images", async () => {
-      const image = await decentralizedSocialMedia.images(imageCount);
-      assert.equal(image.id.toNumber(), imageCount.toNumber(), "id is correct");
-      assert.equal(image.hash, hash, "Hash is correct");
+    it("lists posts", async () => {
+      const post = await decentraMedia.posts(postCount);
+      assert.equal(post.id.toNumber(), postCount.toNumber(), "id is correct!");
+      assert.equal(post.hash, hash, "Hash is correct!");
       assert.equal(
-        image.description,
-        "Image description",
-        "description is correct"
+        post.description,
+        "This is the description",
+        "Description is correct!"
       );
-      assert.equal(image.tipAmount, "0", "tip amount is correct");
-      assert.equal(image.author, author, "author is correct");
+      assert.equal(post.tipAmount, "0", "Tip amount is correct!");
+      assert.equal(post.author, author, "Author is correct!");
     });
 
-    it("allows users to tip images", async () => {
-      // Track the author balance before purchase
-      let oldAuthorBalance;
-      oldAuthorBalance = await web3.eth.getBalance(author);
+    it("allows users to tip posts", async () => {
+      let oldAuthorBalance = await web3.eth.getBalance(author);
       oldAuthorBalance = new web3.utils.BN(oldAuthorBalance);
 
-      result = await decentralizedSocialMedia.tipImageOwner(imageCount, {
+      result = await decentraMedia.tipPostOwner(postCount, {
         from: tipper,
         value: web3.utils.toWei("1", "Ether"),
       });
 
-      // SUCCESS
       const event = result.logs[0].args;
-      assert.equal(event.id.toNumber(), imageCount.toNumber(), "id is correct");
-      assert.equal(event.hash, hash, "Hash is correct");
+      assert.equal(event.id.toNumber(), postCount.toNumber(), "id is correct!");
+      assert.equal(event.hash, hash, "Hash is correct!");
       assert.equal(
         event.description,
-        "Image description",
-        "description is correct"
+        "This is the description",
+        "Description is correct!"
       );
       assert.equal(
         event.tipAmount,
         "1000000000000000000",
-        "tip amount is correct"
+        "Tip amount is correct!"
       );
-      assert.equal(event.author, author, "author is correct");
+      assert.equal(event.author, author, "Author is correct!");
 
-      // Check that author received funds
-      let newAuthorBalance;
-      newAuthorBalance = await web3.eth.getBalance(author);
+      let newAuthorBalance = await web3.eth.getBalance(author);
       newAuthorBalance = new web3.utils.BN(newAuthorBalance);
-
-      let tipImageOwner;
-      tipImageOwner = web3.utils.toWei("1", "Ether");
-      tipImageOwner = new web3.utils.BN(tipImageOwner);
-
-      const expectedBalance = oldAuthorBalance.add(tipImageOwner);
+      let tipPostOwnerValue = web3.utils.toWei("1", "Ether");
+      tipPostOwnerValue = new web3.utils.BN(tipPostOwnerValue);
+      const expectedBalance = oldAuthorBalance.add(tipPostOwnerValue);
 
       assert.equal(newAuthorBalance.toString(), expectedBalance.toString());
-
-      // FAILURE: Tries to tip a image that does not exist
-      await decentralizedSocialMedia.tipImageOwner(99, {
+      await decentraMedia.tipPostOwner(10000, {
         from: tipper,
         value: web3.utils.toWei("1", "Ether"),
       }).should.be.rejected;
