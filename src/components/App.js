@@ -51,7 +51,7 @@ class App extends Component {
         this.setState({ posts: [...this.state.posts, post] });
       }
       this.setState({
-        posts: this.state.posts.sort((a, b) => b.tipAmount - a.tipAmount),
+        posts: this.state.posts.sort((a, b) => b.numLikes - a.numLikes),
       });
       this.setState({ loading: false });
     } else {
@@ -85,16 +85,21 @@ class App extends Component {
           this.setState({ loading: false });
         });
     });
+    this.loadBlockchainData();
   };
 
   tipPostOwner = (id, tipAmount) => {
-    this.setState({ loading: true });
     this.state.decentraMedia.methods
       .tipPostOwner(id)
       .send({ from: this.state.account, value: tipAmount })
-      .on("transactionHash", (hash) => {
-        this.setState({ loading: false });
-      });
+      .on("transactionHash", (hash) => {});
+  };
+
+  likePost = (id) => {
+    this.state.decentraMedia.methods
+      .likePost(id)
+      .send({ from: this.state.account })
+      .on("transactionHash", (hash) => {});
   };
 
   constructor(props) {
@@ -121,6 +126,7 @@ class App extends Component {
             captureFile={this.captureFile}
             uploadPost={this.uploadPost}
             tipPostOwner={this.tipPostOwner}
+            likethePost={this.likePost}
           />
         )}
       </div>

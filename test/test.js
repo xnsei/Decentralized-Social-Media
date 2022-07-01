@@ -111,5 +111,15 @@ contract("decentralizedSocialMedia", ([deployer, author, tipper]) => {
         value: web3.utils.toWei("1", "Ether"),
       }).should.be.rejected;
     });
+
+    it("allows users to like posts", async () => {
+      let post = await decentraMedia.posts(postCount);
+      assert.equal(post.numLikes.toString(), "0");
+      result = await decentraMedia.likePost(postCount);
+      const event = result.logs[0].args;
+      post = await decentraMedia.posts(postCount);
+      assert.equal(post.numLikes.toString(), "1");
+      assert.equal(event.numLikes.toString(), "1", "Like is not registered");
+    });
   });
 });

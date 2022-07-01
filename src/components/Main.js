@@ -100,6 +100,20 @@ class Main extends Component {
                           TIP 0.1 ETH
                         </button>
                       </li>
+                      <li key={key} className="list-group-item">
+                        <small className="float-left mt-1 text-muted">
+                          <button
+                            name={post.id}
+                            onClick={(event) => {
+                              event.currentTarget.disabled = true;
+                              this.props.likethePost(event.target.name);
+                            }}
+                          >
+                            Like!
+                          </button>{" "}
+                          {post.numLikes.toString()} Likes
+                        </small>
+                      </li>
                     </ul>
                   </div>
                 );
