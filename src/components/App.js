@@ -49,6 +49,15 @@ class App extends Component {
       for (let i = 1; i <= postCount; i++) {
         const post = await decentraMedia.methods.posts(i).call();
         this.setState({ posts: [...this.state.posts, post] });
+        const commentCount = post.commentCount;
+        let commentArray = [];
+        for (let j = 1; j <= commentCount; j++) {
+          const uniqueId = `${i}#${j}`;
+          const comment = await decentraMedia.methods.comments(uniqueId).call();
+          commentArray.push(comment);
+        }
+        this.state.comments.set(post.id.toString(), commentArray);
+        // console.log(commentArray);
       }
       this.setState({
         posts: this.state.posts.sort((a, b) => b.numLikes - a.numLikes),
@@ -102,12 +111,23 @@ class App extends Component {
       .on("transactionHash", (hash) => {});
   };
 
+  postComment = (id, content) => {
+    this.setState({ loading: true });
+    this.state.decentraMedia.methods
+      .postComment(id, content)
+      .send({ from: this.state.account })
+      .on("transactionHash", (hash) => {
+        this.setState({ loading: false });
+      });
+  };
+
   constructor(props) {
     super(props);
     this.state = {
       account: "",
       decentraMedia: null,
       posts: [],
+      comments: new Map(),
       loading: true,
     };
   }
@@ -127,6 +147,8 @@ class App extends Component {
             uploadPost={this.uploadPost}
             tipPostOwner={this.tipPostOwner}
             likethePost={this.likePost}
+            postComment={this.postComment}
+            comments={this.state.comments}
           />
         )}
       </div>

@@ -1,5 +1,8 @@
-import React, { Component } from "react";
+import React, { Component, useState } from "react";
 import Identicon from "identicon.js";
+import "bootstrap/dist/css/bootstrap.css";
+import Button from "react-bootstrap/Button";
+import Collapse from "react-bootstrap/Collapse";
 
 class Main extends Component {
   render() {
@@ -103,6 +106,7 @@ class Main extends Component {
                       <li key={key} className="list-group-item">
                         <small className="float-left mt-1 text-muted">
                           <button
+                            className="btn btn-primary btn-sm"
                             name={post.id}
                             onClick={(event) => {
                               event.currentTarget.disabled = true;
@@ -113,6 +117,67 @@ class Main extends Component {
                           </button>{" "}
                           {post.numLikes.toString()} Likes
                         </small>
+                      </li>
+                      <li key={key} className="list-group-item">
+                        <form
+                          name={post.id}
+                          onSubmit={(event) => {
+                            event.preventDefault();
+                            const comment = this.postComment.value;
+                            this.props.postComment(event.target.name, comment);
+                          }}
+                          className="row"
+                        >
+                          <div className="col-9">
+                            <input
+                              id="postComment"
+                              type="text"
+                              ref={(input) => {
+                                this.postComment = input;
+                              }}
+                              className="form-control"
+                              placeholder="Comment...."
+                              required
+                            ></input>
+                          </div>
+                          <div className="col-2">
+                            <button
+                              type="submit"
+                              className="btn btn-primary btn-sm"
+                            >
+                              Upload!
+                            </button>
+                          </div>
+                        </form>
+                      </li>
+                      <li key={key} className="list-group-item">
+                        {this.props.comments
+                          .get(post.id.toString())
+                          .map((comment) => {
+                            return (
+                              <ul className="list-group">
+                                <li className="list-group-item">
+                                  <div>
+                                    <img
+                                      className="mr-2"
+                                      width="10"
+                                      height="10"
+                                      src={`data:image/png;base64,${new Identicon(
+                                        post.author,
+                                        10
+                                      ).toString()}`}
+                                    ></img>
+                                    <small className="text-muted">
+                                      {post.author}
+                                    </small>
+                                  </div>
+                                  <p className="text-muted card-text h7">
+                                    {comment.content}
+                                  </p>
+                                </li>
+                              </ul>
+                            );
+                          })}
                       </li>
                     </ul>
                   </div>

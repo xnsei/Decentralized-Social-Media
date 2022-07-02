@@ -121,5 +121,32 @@ contract("decentralizedSocialMedia", ([deployer, author, tipper]) => {
       assert.equal(post.numLikes.toString(), "1");
       assert.equal(event.numLikes.toString(), "1", "Like is not registered");
     });
+
+    it("allows users to comment on posts", async () => {
+      let post = await decentraMedia.posts(postCount);
+      assert.equal(
+        post.commentCount.toString(),
+        "0",
+        "Smart Contract already having some comments!"
+      );
+      result = await decentraMedia.postComment(postCount, "This is a comment!");
+      const event = result.logs[0].args;
+      assert.equal(event.commentUniqueId, "1#1", "Comment is not registered");
+      assert.equal(
+        event.postId.toString(),
+        postCount.toString(),
+        "Comment is registerd to different contract!"
+      );
+      assert.equal(
+        event.commentId.toString(),
+        "1",
+        "comment is not registered"
+      );
+      assert.equal(
+        event.content,
+        "This is a comment!",
+        "Comment content is wrong! :("
+      );
+    });
   });
 });
