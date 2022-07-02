@@ -19,22 +19,22 @@ As the Name suggests, it is a decentralized social media application. With the u
 
 ## How to run
 
-- Initialize truffle (don't update the test and config files in this process)
+- Install the dependencies
+
+```
+npm install
+```
+
+- Initialize truffle (truffle will ask to update test and config, deny it)
 
 ```
 truffle init
 ```
 
-- reset the smart contracts
+- reset any existing smart contracts
 
 ```
 truffle migrate --reset
-```
-
-- Install the dependencies
-
-```
-npm install
 ```
 
 - Initialize server
