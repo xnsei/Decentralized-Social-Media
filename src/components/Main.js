@@ -79,32 +79,6 @@ class Main extends Component {
                       </li>
                       <li key={key} className="list-group-item py-2">
                         <small className="float-left mt-1 text-muted">
-                          TIPS:{" "}
-                          {window.web3.utils.fromWei(
-                            post.tipAmount.toString(),
-                            "Ether"
-                          )}{" "}
-                          ETH
-                        </small>
-                        <button
-                          className="btn btn-link btn-sm float-right pt-0"
-                          name={post.id}
-                          onClick={(event) => {
-                            let tipAmount = window.web3.utils.toWei(
-                              "0.1",
-                              "Ether"
-                            );
-                            this.props.tipPostOwner(
-                              event.target.name,
-                              tipAmount
-                            );
-                          }}
-                        >
-                          TIP 0.1 ETH
-                        </button>
-                      </li>
-                      <li key={key} className="list-group-item">
-                        <small className="float-left mt-1 text-muted">
                           <button
                             className="btn btn-primary btn-sm"
                             name={post.id}
@@ -117,6 +91,30 @@ class Main extends Component {
                           </button>{" "}
                           {post.numLikes.toString()} Likes
                         </small>
+                        <small className="float-right mt-1 text-muted ">
+                          TIPS:{" "}
+                          {window.web3.utils.fromWei(
+                            post.tipAmount.toString(),
+                            "Ether"
+                          )}{" "}
+                          ETH{" "}
+                          <button
+                            className="btn btn-primary btn-sm"
+                            name={post.id}
+                            onClick={(event) => {
+                              let tipAmount = window.web3.utils.toWei(
+                                "0.1",
+                                "Ether"
+                              );
+                              this.props.tipPostOwner(
+                                event.target.name,
+                                tipAmount
+                              );
+                            }}
+                          >
+                            TIP!
+                          </button>
+                        </small>
                       </li>
                       <li key={key} className="list-group-item">
                         <form
@@ -128,7 +126,7 @@ class Main extends Component {
                           }}
                           className="row"
                         >
-                          <div className="col-9">
+                          <div className="input-group mb-3">
                             <input
                               id="postComment"
                               type="text"
@@ -139,14 +137,14 @@ class Main extends Component {
                               placeholder="Comment...."
                               required
                             ></input>
-                          </div>
-                          <div className="col-2">
-                            <button
-                              type="submit"
-                              className="btn btn-primary btn-sm"
-                            >
-                              Upload!
-                            </button>
+                            <div className="input-group-append">
+                              <button
+                                type="submit"
+                                className="btn btn-primary btn-sm"
+                              >
+                                Upload!
+                              </button>
+                            </div>
                           </div>
                         </form>
                       </li>

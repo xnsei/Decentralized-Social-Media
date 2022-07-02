@@ -57,7 +57,6 @@ class App extends Component {
           commentArray.push(comment);
         }
         this.state.comments.set(post.id.toString(), commentArray);
-        // console.log(commentArray);
       }
       this.setState({
         posts: this.state.posts.sort((a, b) => b.numLikes - a.numLikes),
@@ -94,7 +93,6 @@ class App extends Component {
           this.setState({ loading: false });
         });
     });
-    this.loadBlockchainData();
   };
 
   tipPostOwner = (id, tipAmount) => {
