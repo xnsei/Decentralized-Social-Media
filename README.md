@@ -43,7 +43,7 @@ truffle migrate --reset
 npm start
 ```
 
-## How to test Smart Contract
+## Testing Smart Contracts
 
 - Run this command
 
