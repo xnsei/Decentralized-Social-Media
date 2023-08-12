@@ -13,9 +13,9 @@ As the Name suggests, it is a decentralized social media application. With the u
 - Make sure you have Ganache network added and selected in Metamask
 - Import Ganache testing accounts to Metamask:
 
-  1. Opt Import using seed phrase.
-  2. If you don't see an option there, click Import existing account.
-  3. Paste 12 word phrase from Ganache to Metamask and create a new Password.
+  - Opt Import using seed phrase.
+  - If you don't see an option there, click Import existing account.
+  - Paste 12 word phrase from Ganache to Metamask and create a new Password.
 
 ## How to run
 
