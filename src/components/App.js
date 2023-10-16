@@ -38,10 +38,11 @@ class App extends Component {
     this.setState({ account: accounts[0] });
     const networkId = await web3.eth.net.getId();
     const networkData = decentralizedSocialMedia.networks[networkId];
+    const contractAddress = '0xD24182355b9F0f25f46D6F6e4DA6335530f55825';
     if (networkData) {
       const decentraMedia = web3.eth.Contract(
         decentralizedSocialMedia.abi,
-        networkData.address
+        contractAddress
       );
       this.setState({ decentraMedia: decentraMedia });
       const postCount = await decentraMedia.methods.postCount().call();
