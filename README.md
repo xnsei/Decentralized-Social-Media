@@ -3,6 +3,7 @@
 As the Name suggests, it is a decentralized social media application. With the user-friendly interface, creators can post the content into the application by paying a small amount of ethers for confirming the transaction. After posting, the content can be viewed, liekd as well as commented on the application and another interesting feature is tipping of content posted. People can directly tip their liked content where the ethers would directly go to the creator’s account.
 
 ### Demo
+This DAPP is hosted at : [Decentramedia](https://decentramedia.netlify.app/)
 
 ![Alt text](./src/DecentraMedia.png)
 
