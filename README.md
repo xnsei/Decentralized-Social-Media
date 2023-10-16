@@ -7,6 +7,8 @@ This DAPP is hosted at : [Decentramedia](https://decentramedia.netlify.app/)
 
 ![Alt text](./src/DecentraMedia.png)
 
+## Running it Locally
+
 ### Prerequisites
 
 - Make sure you have Ganache installed on your machine. You can download from [here](https://trufflesuite.com/ganache/)
@@ -18,7 +20,7 @@ This DAPP is hosted at : [Decentramedia](https://decentramedia.netlify.app/)
   - If you don't see an option there, click Import existing account.
   - Paste 12 word phrase from Ganache to Metamask and create a new Password.
 
-## How to run
+### How to run
 
 - Install the dependencies
 
